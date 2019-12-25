@@ -3,4 +3,3 @@
     entry: check-signoff
     language: python
     stages: [commit-msg]
-
