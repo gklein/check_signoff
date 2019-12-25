@@ -5,10 +5,8 @@ from __future__ import unicode_literals
 import os
 import sys
 
-from subprocess import check_output, CalledProcessError
 
-
-def main(argv=None):
+def main():
     retval = 0
     commit_msg_path = sys.argv[1]
     with open(commit_msg_path) as f:
