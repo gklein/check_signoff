@@ -7,15 +7,8 @@ from subprocess import check_output, CalledProcessError
 
 
 def main(argv=None):
-
     retval = 0
-    try:
-        base = check_output('git rev-parse --show-toplevel', shell=True)
-    except CalledProcessError:
-        raise IOError('Current working directory is not a git repository')
-
-    root = base.decode().strip()
-    commit_msg_path = os.path.join(root, '.git/COMMIT_EDITMSG')
+    commit_msg_path = sys.argv[1]
     with open(commit_msg_path) as f:
         found = 'Signed-off-by: ' in f.read()
         if not found:

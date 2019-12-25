@@ -2,4 +2,5 @@
     name: Check for exisitng git commit signoff message
     entry: check-signoff
     language: python
+    stages: [commit-msg]
 
