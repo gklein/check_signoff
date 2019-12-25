@@ -14,7 +14,7 @@ def main():
         if not found:
             retval = 1
             print("The current git commit message is missing a 'Signed-off-by:' section")
-            print("Please recommit with 'git commit --amend --signoff'")
+            print("Please commit with 'git commit --signoff'")
 
     return retval
 
