@@ -2,36 +2,27 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import argparse
-import ast
-import platform
-import sys
-import traceback
-from typing import Optional
-from typing import Sequence
+import os
+from subprocess import check_output, CalledProcessError
 
 
-def main(argv=None):  # type: (Optional[Sequence[str]]) -> int
-    parser = argparse.ArgumentParser()
-    parser.add_argument('filenames', nargs='*')
-    args = parser.parse_args(argv)
+def main(argv=None):
 
     retval = 0
-    for filename in args.filenames:
+    try:
+        base = check_output('git rev-parse --show-toplevel', shell=True)
+    except CalledProcessError:
+        raise IOError('Current working directory is not a git repository')
 
-        try:
-            with open(filename, 'rb') as f:
-                ast.parse(f.read(), filename=filename)
-        except SyntaxError:
-            print('{}: failed parsing with {} {}:'.format(
-                filename,
-                platform.python_implementation(),
-                sys.version.partition(' ')[0],
-            ))
-            print('\n{}'.format(
-                '    ' + traceback.format_exc().replace('\n', '\n    '),
-            ))
+    root = base.decode().strip()
+    commit_msg_path = os.path.join(root, '.git/COMMIT_EDITMSG')
+    with open(commit_msg_path) as f:
+        found = 'Signed-off-by: ' in f.read()
+        if not found:
             retval = 1
+            print("The current git commit message is missing a 'Signed-off-by:' section")
+            print("Please recommit with 'git commit --amend --signoff'")
+
     return retval
 
 

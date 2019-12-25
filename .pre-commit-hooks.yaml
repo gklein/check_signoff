@@ -1,5 +1,5 @@
--   id: check_signoff
+-   id: check-signoff
     name: Check for exisitng git commit signoff message
-    entry: check_signoff
+    entry: check-signoff
     language: python
 
